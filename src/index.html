@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Static Template</title>
+    <style>
+      @font-face {
+        font-family: Habbo Volter;
+        src: url("https://alynva.surge.sh/fonts/1052_class_1740_Volter.otf");
+      }
+      @font-face {
+        font-family: Habbo Volter;
+        src: url("https://alynva.surge.sh/fonts/728_class_1739_Volter Bold.otf");
+        font-weight: bold;
+      }
+      * {
+        font-family: "Habbo Volter";
+        font-size: 8pt;
+        color: white;
+      }
+      main {
+        margin: 0 auto;
+        background-color: rgb(61, 61, 61);
+        width: 225px;
+        padding: 3px;
+      }
+      main input[type=radio] {
+        all: unset;
+      }
+      .header {
+        padding: 2px 0;
+      }
+      h1 {
+        text-align: center;
+      }
+      h1,
+      h2 {
+        margin: 0;
+        font-weight: normal;
+      }
+      hr {
+        border-color: rgb(35, 35, 35);
+        border-width: 1px 0 0 0;
+        margin: 2px 0;
+      }
+      .preview {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+      }
+      .preview > .final {
+        position: relative;
+        width: 64px;
+        height: 64px;
+        overflow: hidden;
+      }
+      .preview > .final > *,
+      .preview > .final > .icons > * {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+      .preview > .final > .bg,
+      .preview > .final > .icons > .icon,
+      .preview > .final > .fg {
+        width: 64px;
+        height: 64px;
+        
+        background-repeat: no-repeat;
+        background-position: center bottom;
+      }
+      .preview > .final > .icons {
+        left: -17px;
+        top: -24px;
+        width: 62px;
+        height: 40px;
+      }
+      .tabs > input {
+        display: none;
+      }
+
+      .tabs > .selection {
+        display: flex;
+      }
+      .tabs > .selection > label {
+        border: 1px solid white;
+        padding: 2px 9px;
+        cursor: pointer;
+      }
+      .tabs > input#tab1:checked ~ .selection > label[for="tab1"],
+      .tabs > input#tab2:checked ~ .selection > label[for="tab2"],
+      .tabs > input#tab3:checked ~ .selection > label[for="tab3"] {
+        border-color: rgb(87, 87, 87);
+      }
+
+      .tabs > .content > div[data-tab] {
+        display: none;
+      }
+      .tabs > input#tab1:checked ~ .content > div[data-tab="1"],
+      .tabs > input#tab2:checked ~ .content > div[data-tab="2"],
+      .tabs > input#tab3:checked ~ .content > div[data-tab="3"] {
+        display: initial;
+      }
+
+      .preview > .selection > div[data-tab] {
+        display: none;
+      }
+
+      main:has(.tabs > input#tab1:checked) > .preview > .selection > div[data-tab="1"],
+      main:has(.tabs > input#tab2:checked) > .preview > .selection > div[data-tab="2"],
+      main:has(.tabs > input#tab3:checked) > .preview > .selection > div[data-tab="3"] {
+        display: initial;
+      }
+      .preview > .selection > div[data-tab="2"] {
+        position: relative;
+      }
+      .preview > .selection > div[data-tab="2"] > div {
+        position: absolute;
+        left: 1px;
+        top: -30px;
+        overflow: hidden;
+        width: 62px;
+        height: 40px;
+      }
+      .preview > .selection > div[data-tab="2"] > div > input {
+        appearance: none;
+        all: unset;
+        width: 34px;
+        height: 17px;
+        position: absolute;
+        clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+      }
+      .preview > .selection > div[data-tab="2"] > div > input:not(:checked) {
+        cursor: pointer;
+        background: url(./assets/core/14_class_1152.png);
+      }
+      .preview > .selection > div[data-tab="2"] > div > input {
+        background: url(./assets/core/505_class_1203.png);
+      }
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(8),
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(11),
+      .preview > .final > .icons > .icon:nth-child(8),
+      .preview > .final > .icons > .icon:nth-child(11) {
+        left: -16px;
+      }
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(4),
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(9),
+      .preview > .final > .icons > .icon:nth-child(4),
+      .preview > .final > .icons > .icon:nth-child(9) {
+        left: -1px;
+      }
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(1),
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(5),
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(10),
+      .preview > .final > .icons > .icon:nth-child(1),
+      .preview > .final > .icons > .icon:nth-child(5),
+      .preview > .final > .icons > .icon:nth-child(10) {
+        left: 15px;
+      }
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(2),
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(6),
+      .preview > .final > .icons > .icon:nth-child(2),
+      .preview > .final > .icons > .icon:nth-child(6) {
+        left: 31px;
+      }
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(3),
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(7),
+      .preview > .final > .icons > .icon:nth-child(3),
+      .preview > .final > .icons > .icon:nth-child(7) {
+        left: 47px;
+      }
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(1),
+      .preview > .final > .icons > .icon:nth-child(1) {
+        top: 0px;
+      }
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(2),
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(4),
+      .preview > .final > .icons > .icon:nth-child(2),
+      .preview > .final > .icons > .icon:nth-child(4) {
+        top: 8px;
+      }
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(3),
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(5),
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(8),
+      .preview > .final > .icons > .icon:nth-child(3),
+      .preview > .final > .icons > .icon:nth-child(5),
+      .preview > .final > .icons > .icon:nth-child(8) {
+        top: 16px;
+      }
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(6),
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(9),
+      .preview > .final > .icons > .icon:nth-child(6),
+      .preview > .final > .icons > .icon:nth-child(9) {
+        top: 24px;
+      }
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(7),
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(10),
+      .preview > .selection > div[data-tab="2"] > div > input:nth-child(11),
+      .preview > .final > .icons > .icon:nth-child(7),
+      .preview > .final > .icons > .icon:nth-child(10),
+      .preview > .final > .icons > .icon:nth-child(11) {
+        top: 32px;
+      }
+      .tabs > .content > div[data-tab] > .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 64px);
+        gap: 2px;
+        height: calc(3 * 64px +  2 * 2px);
+        overflow-y: auto;
+        scroll-snap-type: y mandatory;
+        scroll-padding: 1px;
+        padding: 1px;
+      }
+      .tabs > .content > div[data-tab] > .grid > * {
+        scroll-snap-align: start;
+        background-color: rgb(102, 102, 102);
+        background-repeat: no-repeat;
+        background-position: center bottom;
+      }
+      .tabs > .content > div[data-tab] > .grid > input {
+        width: 64px;
+        height: 64px;
+        display: inline-block;
+        position: relative;
+      }
+      .tabs > .content > div[data-tab] > .grid > input:not(:checked) {
+        cursor: pointer;
+      }
+      .tabs > .content > div[data-tab] > .grid > input:checked::after {
+        content: '';
+        position: absolute;
+        left: -1px;
+        top: -1px;
+        width: 66px;
+        height: 66px;
+        background: url(./assets/core/633_class_1330.png)
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="header">
+        <h1>Edit Navigator room icon</h1>
+      </div>
+      <hr />
+      <div class="preview">
+        <div class="final">
+          <div class="bg"></div>
+          <div class="icons">
+            <div class="icon"></div>
+            <div class="icon"></div>
+            <div class="icon"></div>
+            <div class="icon"></div>
+            <div class="icon"></div>
+            <div class="icon"></div>
+            <div class="icon"></div>
+            <div class="icon"></div>
+            <div class="icon"></div>
+            <div class="icon"></div>
+            <div class="icon"></div>
+          </div>
+          <div class="fg"></div>
+          
+          <img src="./assets/core/219_class_1358.png" alt="" />
+        </div>
+        <div class="selection">
+          <div data-tab="1">
+            <img src="./assets/core/82_class_1217.png" alt="" />
+          </div>
+          <div data-tab="2">
+            <img src="./assets/core/117_class_1256.png" alt="" />
+            <div>
+              <input type="radio" name="tile" value="none" id="1" class="icon">
+              <input type="radio" name="tile" value="none" id="2" class="icon">
+              <input type="radio" name="tile" value="none" id="3" class="icon">
+              <input type="radio" name="tile" value="none" id="4" class="icon">
+              <input type="radio" name="tile" value="none" id="5" class="icon" checked>
+              <input type="radio" name="tile" value="none" id="6" class="icon">
+              <input type="radio" name="tile" value="none" id="7" class="icon">
+              <input type="radio" name="tile" value="none" id="8" class="icon">
+              <input type="radio" name="tile" value="none" id="9" class="icon">
+              <input type="radio" name="tile" value="none" id="10" class="icon">
+              <input type="radio" name="tile" value="none" id="11" class="icon">
+            </div>
+          </div>
+          <div data-tab="3">
+            <img src="./assets/core/456_class_1146.png" alt="" />
+          </div>
+        </div>
+      </div>
+      <div class="tabs">
+        <input type="radio" name="tab" id="tab1" value="tab1" checked />
+        <input type="radio" name="tab" id="tab2" value="tab2" />
+        <input type="radio" name="tab" id="tab3" value="tab3" />
+
+        <div class="selection">
+          <label for="tab1" class="btn">Background</label>
+          <label for="tab2" class="btn">Icons</label>
+          <label for="tab3" class="btn">Top layer</label>
+        </div>
+        <div class="content">
+          <div data-tab="1">
+            <h2>Select background image</h2>
+            <div class="grid">
+              <input type="radio" name="background" value="459_class_1148" style="background-image: url(./assets/backgrounds/459_class_1148.png)" checked />
+              <input type="radio" name="background" value="812_class_1299" style="background-image: url(./assets/backgrounds/812_class_1299.png)" />
+              <input type="radio" name="background" value="549_class_1246" style="background-image: url(./assets/backgrounds/549_class_1246.png)" />
+              <input type="radio" name="background" value="830_class_1315" style="background-image: url(./assets/backgrounds/830_class_1315.png)" />
+              <input type="radio" name="background" value="471_class_1162" style="background-image: url(./assets/backgrounds/471_class_1162.png)" />
+              <input type="radio" name="background" value="859_class_1340" style="background-image: url(./assets/backgrounds/859_class_1340.png)" />
+              <input type="radio" name="background" value="710_class_1194" style="background-image: url(./assets/backgrounds/710_class_1194.png)" />
+              <input type="radio" name="background" value="255_class_1169" style="background-image: url(./assets/backgrounds/255_class_1169.png)" />
+              <input type="radio" name="background" value="313_class_1227" style="background-image: url(./assets/backgrounds/313_class_1227.png)" />
+              <input type="radio" name="background" value="462_class_1155" style="background-image: url(./assets/backgrounds/462_class_1155.png)" />
+              <input type="radio" name="background" value="231_class_1147" style="background-image: url(./assets/backgrounds/231_class_1147.png)" />
+              <input type="radio" name="background" value="437_class_1347" style="background-image: url(./assets/backgrounds/437_class_1347.png)" />
+              <input type="radio" name="background" value="119_class_1258" style="background-image: url(./assets/backgrounds/119_class_1258.png)" />
+              <input type="radio" name="background" value="408_class_1323" style="background-image: url(./assets/backgrounds/408_class_1323.png)" />
+              <input type="radio" name="background" value="274_class_1186" style="background-image: url(./assets/backgrounds/274_class_1186.png)" />
+              <input type="radio" name="background" value="208_class_1352" style="background-image: url(./assets/backgrounds/208_class_1352.png)" />
+              <input type="radio" name="background" value="558_class_1259" style="background-image: url(./assets/backgrounds/558_class_1259.png)" />
+              <input type="radio" name="background" value="433_class_1344" style="background-image: url(./assets/backgrounds/433_class_1344.png)" />
+              <input type="radio" name="background" value="741_class_1228" style="background-image: url(./assets/backgrounds/741_class_1228.png)" />
+              <input type="radio" name="background" value="176_class_1311" style="background-image: url(./assets/backgrounds/176_class_1311.png)" />
+              <input type="radio" name="background" value="475_class_1167" style="background-image: url(./assets/backgrounds/475_class_1167.png)" />
+              <input type="radio" name="background" value="539_class_1240" style="background-image: url(./assets/backgrounds/539_class_1240.png)" />
+              <input type="radio" name="background" value="670_class_1149" style="background-image: url(./assets/backgrounds/670_class_1149.png)" />
+            </div>
+          </div>
+          <div data-tab="2">
+            <h2>Select image for the top</h2>
+            <div class="grid">
+              <input type="radio" name="icon" value="none" style="background-image: url(./assets/core/185_class_1321.png)" checked />
+
+              <input type="radio" name="icon" value="175_class_1310" style="background-image: url(./assets/icons/175_class_1310.png)" />
+              <input type="radio" name="icon" value="768_class_1257" style="background-image: url(./assets/icons/768_class_1257.png)" />
+              <input type="radio" name="icon" value="322_class_1239" style="background-image: url(./assets/icons/322_class_1239.png)" />
+              <input type="radio" name="icon" value="467_class_1160" style="background-image: url(./assets/icons/467_class_1160.png)" />
+              <input type="radio" name="icon" value="522_class_1220" style="background-image: url(./assets/icons/522_class_1220.png)" />
+              <input type="radio" name="icon" value="20_class_1156" style="background-image: url(./assets/icons/20_class_1156.png)" />
+              <input type="radio" name="icon" value="837_class_1320" style="background-image: url(./assets/icons/837_class_1320.png)" />
+              <input type="radio" name="icon" value="615_class_1302" style="background-image: url(./assets/icons/615_class_1302.png)" />
+              <input type="radio" name="icon" value="851_class_1336" style="background-image: url(./assets/icons/851_class_1336.png)" />
+              <input type="radio" name="icon" value="536_class_1237" style="background-image: url(./assets/icons/536_class_1237.png)" />
+              <input type="radio" name="icon" value="868_class_1348" style="background-image: url(./assets/icons/868_class_1348.png)" />
+              <input type="radio" name="icon" value="179_class_1317" style="background-image: url(./assets/icons/179_class_1317.png)" />
+              <input type="radio" name="icon" value="760_class_1244" style="background-image: url(./assets/icons/760_class_1244.png)" />
+              <input type="radio" name="icon" value="413_class_1325" style="background-image: url(./assets/icons/413_class_1325.png)" />
+              <input type="radio" name="icon" value="130_class_1272" style="background-image: url(./assets/icons/130_class_1272.png)" />
+              <input type="radio" name="icon" value="314_class_1226" style="background-image: url(./assets/icons/314_class_1226.png)" />
+              <input type="radio" name="icon" value="359_class_1276" style="background-image: url(./assets/icons/359_class_1276.png)" />
+              <input type="radio" name="icon" value="665_class_1365" style="background-image: url(./assets/icons/665_class_1365.png)" />
+              <input type="radio" name="icon" value="301_class_1216" style="background-image: url(./assets/icons/301_class_1216.png)" />
+              <input type="radio" name="icon" value="170_class_1308" style="background-image: url(./assets/icons/170_class_1308.png)" />
+              <input type="radio" name="icon" value="854_class_1338" style="background-image: url(./assets/icons/854_class_1338.png)" />
+              <input type="radio" name="icon" value="878_class_1361" style="background-image: url(./assets/icons/878_class_1361.png)" />
+              <input type="radio" name="icon" value="159_class_1301" style="background-image: url(./assets/icons/159_class_1301.png)" />
+              <input type="radio" name="icon" value="771_class_1263" style="background-image: url(./assets/icons/771_class_1263.png)" />
+              <input type="radio" name="icon" value="638_class_1334" style="background-image: url(./assets/icons/638_class_1334.png)" />
+              <input type="radio" name="icon" value="653_class_1349" style="background-image: url(./assets/icons/653_class_1349.png)" />
+              <input type="radio" name="icon" value="203_class_1343" style="background-image: url(./assets/icons/203_class_1343.png)" />
+              
+              <!-- outros -->
+              
+              <!-- <input type="radio" name="icon" value="616_class_1456" style="background-image: url(./assets/icons/616_class_1456.png)" /> -->
+            </div>
+          </div>
+          <div data-tab="3">
+            <h2>Select image for the top</h2>
+            <div class="grid">
+              <input type="radio" name="frame" value="none" style="background-image: url(./assets/core/185_class_1321.png)" checked />
+
+              <input type="radio" name="frame" value="318_class_1233" style="background-image: url(./assets/top-layer/318_class_1233.png)" />
+              <input type="radio" name="frame" value="762_class_1247" style="background-image: url(./assets/top-layer/762_class_1247.png)" />
+              <input type="radio" name="frame" value="418_class_1332" style="background-image: url(./assets/top-layer/418_class_1332.png)" />
+              <input type="radio" name="frame" value="325_class_1241" style="background-image: url(./assets/top-layer/325_class_1241.png)" />
+              <input type="radio" name="frame" value="452_class_1368" style="background-image: url(./assets/top-layer/452_class_1368.png)" />
+              <input type="radio" name="frame" value="719_class_1208" style="background-image: url(./assets/top-layer/719_class_1208.png)" />
+              <input type="radio" name="frame" value="569_class_1266" style="background-image: url(./assets/top-layer/569_class_1266.png)" />
+              <input type="radio" name="frame" value="395_class_1305" style="background-image: url(./assets/top-layer/395_class_1305.png)" />
+              <input type="radio" name="frame" value="403_class_1316" style="background-image: url(./assets/top-layer/403_class_1316.png)" />
+              <input type="radio" name="frame" value="378_class_1287" style="background-image: url(./assets/top-layer/378_class_1287.png)" />
+              <input type="radio" name="frame" value="504_class_1199" style="background-image: url(./assets/top-layer/504_class_1199.png)" />
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <button onclick="save()">Save</button>
+        <button onclick="cancel()">Cancel</button>
+      </div>
+    </main>
+
+    <script>
+      function save() {
+
+      }
+
+      function cancel() {
+        Array.from(document.querySelectorAll(`input[type=radio]:first-child`))
+          .forEach(elem => elem.checked = true)
+        Array.from(document.querySelectorAll(`input[name="tile"]`))
+          .forEach(elem => elem.value = 'none')
+
+        document.querySelector(`input[name="tile"]:nth-child(5)`).checked = true
+
+        update()
+      }
+      cancel()
+
+      function update(evt) {
+        const background = document.querySelector(`input[name="background"]:checked`).value
+        document.querySelector(".preview .final .bg").style.backgroundImage = `url(./assets/backgrounds/${background}.png)`
+
+
+        if (evt?.target.name === 'tile') {
+          const icon = document.querySelector(`.preview .selection > div[data-tab="2"] > div > input[name="tile"]:checked`).value
+          document.querySelector(`input[name="icon"][value="${icon}"]`).checked = true
+        } else {
+          const icon = document.querySelector(`input[name="icon"]:checked`).value
+          document.querySelector(`.preview .selection > div[data-tab="2"] > div > input[name="tile"]:checked`).value = icon
+        }
+
+        const icons = Array.from(document.querySelectorAll(`.preview .selection > div[data-tab="2"] > div > input[name="tile"]`)).map(x => x.value)
+
+        Array.from(document.querySelectorAll(".preview .final .icon"))
+          .forEach((elem, i) => elem.style.backgroundImage = icons[i] === 'none' ? null : `url(./assets/icons/${icons[i]}.png)`)
+
+        
+        const frame = document.querySelector(`input[name="frame"]:checked`).value
+        document.querySelector(".preview .final .fg").style.backgroundImage = frame === 'none' ? null : `url(./assets/top-layer/${frame}.png)`
+      }
+
+      Array.from(document.querySelectorAll(`input[type=radio]`))
+        .forEach(elem => elem.addEventListener("click", update))
+
+    </script>
+  </body>
+</html>
